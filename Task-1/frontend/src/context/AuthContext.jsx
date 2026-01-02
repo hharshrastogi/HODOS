@@ -1,12 +1,46 @@
-import { createContext, useState, useCallback } from 'react';
+import { createContext, useState, useCallback, useEffect } from 'react';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token'));
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Fetch current user on mount if token exists
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      const storedToken = localStorage.getItem('token');
+      if (storedToken) {
+        try {
+          const response = await fetch('/api/auth/me', {
+            headers: {
+              'Authorization': `Bearer ${storedToken}`
+            }
+          });
+          
+          const data = await response.json();
+          
+          if (data.success && data.user) {
+            setUser(data.user);
+            setToken(storedToken);
+          } else {
+            // Invalid token, clear it
+            localStorage.removeItem('token');
+            setToken(null);
+          }
+        } catch (err) {
+          console.error('Failed to fetch user:', err);
+          localStorage.removeItem('token');
+          setToken(null);
+        }
+      }
+      setIsLoading(false);
+    };
+
+    fetchCurrentUser();
+  }, []);
 
   // Login function
   const login = useCallback(async (email, password) => {
