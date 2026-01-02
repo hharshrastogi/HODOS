@@ -26,4 +26,5 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('User', userSchema);
+// Use your specific collection name
+module.exports = mongoose.model('User', userSchema, 'TASK1_JWT');
