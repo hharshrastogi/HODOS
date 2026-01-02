@@ -8,16 +8,11 @@ const taskRoutes = require('./routes/taskRoutes');
 
 const app = express();
 
-// Middleware
 app.use(cors());
 app.use(express.json());
-
-// Database Connection
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('✅ Connected to MongoDB'))
     .catch((error) => console.error('❌ MongoDB connection error:', error.message));
-
-// Routes
 app.use('/tasks', taskRoutes);
 
 app.get('/', (req, res) => {

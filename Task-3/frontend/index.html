@@ -1,94 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Weather Dashboard - Task 3</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>🌤️ Weather Dashboard</h1>
-            <p>Task 3: API Integration with Error Handling</p>
-        </header>
-
-        <div class="search-section">
-            <div class="search-box">
-                <input 
-                    type="text" 
-                    id="cityInput" 
-                    placeholder="Enter city name (e.g., London, Tokyo, New York)"
-                    autocomplete="off"
-                >
-                <button id="searchBtn" onclick="searchWeather()">
-                    Get Weather
-                </button>
-            </div>
-            <p class="hint">Or try coordinates: <a href="#" onclick="searchByCoords(51.5074, -0.1278); return false;">London</a>, 
-                <a href="#" onclick="searchByCoords(40.7128, -74.0060); return false;">New York</a>, 
-                <a href="#" onclick="searchByCoords(35.6762, 139.6503); return false;">Tokyo</a>
-            </p>
-        </div>
-
-        <!-- Loading indicator -->
-        <div id="loadingIndicator" class="loading hidden">
-            <div class="spinner"></div>
-            <p>Fetching weather data...</p>
-        </div>
-
-        <!-- Error display -->
-        <div id="errorDisplay" class="error-box hidden">
-            <div class="error-icon">⚠️</div>
-            <h3 id="errorTitle">Error</h3>
-            <p id="errorMessage"></p>
-            <button onclick="dismissError()" class="dismiss-btn">Dismiss</button>
-        </div>
-
-        <!-- Weather display -->
-        <div id="weatherDisplay" class="weather-card hidden">
-            <div class="weather-header">
-                <h2 id="locationName"></h2>
-                <p id="coordinates"></p>
-            </div>
-            <div class="weather-content">
-                <div class="weather-main">
-                    <div class="temperature">
-                        <span id="tempValue"></span>
-                        <span class="temp-unit">°C</span>
-                    </div>
-                    <div id="weatherDesc" class="weather-desc"></div>
-                </div>
-                <div class="weather-details">
-                    <div class="detail-item">
-                        <span class="detail-label">💧 Humidity</span>
-                        <span id="humidity" class="detail-value"></span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">💨 Wind Speed</span>
-                        <span id="windSpeed" class="detail-value"></span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">🕐 Timezone</span>
-                        <span id="timezone" class="detail-value"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="cache-indicator" id="cacheIndicator"></div>
-        </div>
-
-        <!-- Test error scenarios -->
-        <div class="test-section">
-            <h3>🧪 Test Error Scenarios</h3>
-            <div class="test-buttons">
-                <button onclick="testInvalidCity()" class="test-btn">Invalid City</button>
-                <button onclick="testInvalidCoords()" class="test-btn">Invalid Coords</button>
-                <button onclick="testEmptyInput()" class="test-btn">Empty Input</button>
-                <button onclick="testNetworkError()" class="test-btn">Network Error</button>
-            </div>
-        </div>
-    </div>
-
-    <script src="app.js"></script>
-</body>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>

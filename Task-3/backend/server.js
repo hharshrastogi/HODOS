@@ -7,7 +7,6 @@ const path = require('path');
 
 const app = express();
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend')));
@@ -16,7 +15,6 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 const cache = new Map();
 const CACHE_DURATION = parseInt(process.env.CACHE_DURATION) || 300000; // 5 minutes
 
-// Helper function to get cached data
 function getCachedData(key) {
     const cached = cache.get(key);
     if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
@@ -24,13 +22,11 @@ function getCachedData(key) {
     }
     return null;
 }
-
-// Weather API endpoint with comprehensive error handling
 app.get('/api/weather', async (req, res) => {
     try {
         const { city, latitude, longitude } = req.query;
 
-        // Input validation
+        // Validate input
         if (!city && (!latitude || !longitude)) {
             return res.status(400).json({
                 success: false,
@@ -39,7 +35,6 @@ app.get('/api/weather', async (req, res) => {
             });
         }
 
-        // Validate numeric inputs if provided
         if (latitude && (isNaN(latitude) || latitude < -90 || latitude > 90)) {
             return res.status(400).json({
                 success: false,
@@ -58,7 +53,6 @@ app.get('/api/weather', async (req, res) => {
 
         let lat, lon;
 
-        // If city name is provided, get coordinates using geocoding
         if (city) {
             const cacheKey = `geo_${city}`;
             const cachedGeo = getCachedData(cacheKey);
@@ -104,7 +98,6 @@ app.get('/api/weather', async (req, res) => {
             lon = parseFloat(longitude);
         }
 
-        // Check cache for weather data
         const weatherCacheKey = `weather_${lat}_${lon}`;
         const cachedWeather = getCachedData(weatherCacheKey);
 
@@ -116,7 +109,6 @@ app.get('/api/weather', async (req, res) => {
             });
         }
 
-        // Fetch weather data from Open-Meteo API
         const weatherResponse = await axios.get(
             'https://api.open-meteo.com/v1/forecast',
             {
@@ -142,7 +134,6 @@ app.get('/api/weather', async (req, res) => {
             timestamp: new Date().toISOString()
         };
 
-        // Cache the result
         cache.set(weatherCacheKey, { data: weatherData, timestamp: Date.now() });
 
         res.json({
@@ -198,9 +189,11 @@ app.get('/api/weather', async (req, res) => {
     }
 });
 
-// Health check endpoint
 app.get('/api/health', (req, res) => {
     res.json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
 const PORT = process.env.PORT || 5002;

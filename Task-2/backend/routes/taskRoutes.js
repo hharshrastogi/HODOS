@@ -3,7 +3,6 @@ const Task = require('../models/Task');
 
 const router = express.Router();
 
-// CREATE - POST /tasks
 router.post('/', async (req, res) => {
     try {
         const { title, description } = req.body;
@@ -32,7 +31,6 @@ router.post('/', async (req, res) => {
     }
 });
 
-// READ - GET /tasks
 router.get('/', async (req, res) => {
     try {
         const tasks = await Task.find().sort({ createdAt: -1 });
@@ -51,12 +49,10 @@ router.get('/', async (req, res) => {
     }
 });
 
-// UPDATE - PUT /tasks/:id
 router.put('/:id', async (req, res) => {
     try {
         const { title, description } = req.body;
 
-        // Find and update task
         const task = await Task.findByIdAndUpdate(
             req.params.id,
             { 
@@ -88,7 +84,6 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-// DELETE - DELETE /tasks/:id
 router.delete('/:id', async (req, res) => {
     try {
         const task = await Task.findByIdAndDelete(req.params.id);
